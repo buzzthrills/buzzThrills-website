@@ -79,6 +79,7 @@ const NewsLetterBox: React.FC = () => {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="w-full flex flex-col sm:flex-row items-center gap-3 mx-auto mt-8"
         >
+          
           <input
             type="email"
             placeholder="Enter your email"

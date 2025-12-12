@@ -1,10 +1,14 @@
 import React from 'react'
 import NewsLetterBox from '../components/NewsLetterBos'
+import Testimonial from '../components/Testimonial'
+import LandingPage from '../components/LandingPage'
 
-const Home:React.FC = () => {
+const Home: React.FC = () => {
   return (
     <div>
-        <NewsLetterBox />
+      <LandingPage />
+      <Testimonial />
+      <NewsLetterBox />
     </div>
   )
 }
