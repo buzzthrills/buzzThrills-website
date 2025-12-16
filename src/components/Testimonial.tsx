@@ -1,7 +1,9 @@
 import React from "react";
-import Slider, { Settings } from "react-slick";
+import Slider from "react-slick";
 import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
+import type { Settings } from "react-slick";
+
 import "slick-carousel/slick/slick-theme.css";
 
 interface TestimonialType {

@@ -5,8 +5,9 @@ import Footer from "./components/Footer";
 import "./App.css";
 import Home from "./pages/Home";
 import Subscribe from "./pages/Subscribe";
-import Signup from "./pages/Signup";
-import Signin from "./pages/Signin";
+// import Signup from "./pages/Signup";
+// import Signin from "./pages/Signin";
+import Dashboard from "./pages/Dashboard";
 // import Dashboard from "./pages/Dashboard";
 
 
@@ -19,10 +20,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/subscribe" element={<Subscribe />} />
-
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/signin" element={<Signin />} />
-
+            <Route path="/book" element={<Dashboard />} />
+            {/* <Route path="/signup" element={<Signup />} />
+            <Route path="/signin" element={<Signin />} /> */}
           </Routes>
         </main>
         <Footer />

@@ -2,7 +2,7 @@ import React from "react";
 import HeroSection from "./HeroSection";
 import PlansSection from "./PlansSection";
 import StepsSection from "./StepsSection";
-import CTASection from "./CTASection";
+// import CTASection from "./CTASection";
 
 
 const LandingPage: React.FC = () => {

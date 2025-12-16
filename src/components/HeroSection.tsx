@@ -2,6 +2,8 @@ import React from "react";
 import Particles from "react-tsparticles";
 import { motion } from "framer-motion";
 import { home_banner } from "../assets";
+import { Link } from "react-scroll";
+
 // import heroImage from "../assets/hero-image.png"; // replace with your image path
 
 const HeroSection: React.FC = () => {
@@ -87,13 +89,20 @@ const HeroSection: React.FC = () => {
                         special reminders, and curated surprises delivered straight to your loved ones.
                     </motion.p>
 
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="mt-8 px-12 py-4 bg-gradient-to-r from-[#ffae00] to-[#c804d7] text-white font-bold rounded-2xl shadow-2xl"
+                    <Link
+                        to="newsletter"
+                        smooth={true}
+                        duration={800}
+                        offset={-80} // adjust if you have a fixed navbar
                     >
-                        SUBSCRIBE NOW
-                    </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="mt-8 px-12 py-4 bg-gradient-to-r from-[#ffae00] to-[#c804d7] text-white font-bold rounded-2xl shadow-2xl"
+                        >
+                            SUBSCRIBE NOW
+                        </motion.button>
+                    </Link>
                 </motion.div>
 
                 {/* Image */}

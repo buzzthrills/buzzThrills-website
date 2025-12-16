@@ -6,3 +6,29 @@ body {
   font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
 }
+
+/* Horizontal scrollbar for tabs */
+.tabs-scrollbar::-webkit-scrollbar {
+  height: 2px; /* make it thinner */
+}
+
+.tabs-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 1px;
+}
+
+.tabs-scrollbar::-webkit-scrollbar-thumb {
+  background: #36014b;
+  border-radius: 1px;
+  transition: background 0.3s;
+}
+
+.tabs-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c804d7;
+}
+
+/* Firefox */
+.tabs-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #36014b #f1f1f1;
+}

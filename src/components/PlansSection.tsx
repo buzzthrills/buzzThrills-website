@@ -99,6 +99,7 @@ const PlansSection: React.FC = () => {
               "Custom voice notes",
               "Preferred caller",
               "Bonus calls",
+              "VIP scheduling ",
             ]}
             onSelect={() => (window.location.href = "/subscribe?plan=orbit")}
           />

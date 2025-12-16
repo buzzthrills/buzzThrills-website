@@ -2,8 +2,8 @@
 import { toast } from "react-hot-toast";
 
 // Update API URL to local host
-const API_URL = "http://localhost:3000";
-// const API_URL = "https://buzzthrillz-backend.onrender.com";
+// const API_URL = "http://localhost:3000";
+const API_URL = "https://buzzthrillz-backend.onrender.com";
 
 type ApiOptions = {
   method?: string;
@@ -44,7 +44,7 @@ export const apiRequest = async <T = any>(
     toast.dismiss(toastId);
 
     if (!response.ok) {
-      toast.error(data.msg || "Something went wrong!");
+      toast.error(data.msg || data.message || "Something went wrong!");
       return { success: false, data };
     }
 
