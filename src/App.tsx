@@ -7,7 +7,14 @@ import Home from "./pages/Home";
 import Subscribe from "./pages/Subscribe";
 // import Signup from "./pages/Signup";
 // import Signin from "./pages/Signin";
-import Dashboard from "./pages/Dashboard";
+// import Dashboard from "./pages/Dashboard";
+import Faq from "./pages/Faq";
+import Login from "./pages/Login";
+import DashboardLayout from "./pages/DashboardLayout";
+import BookCallForm from "./components/BookCallForm";
+import CallHistory from "./components/CallHistory";
+import Profile from "./pages/Profile";
+import Recipients from "./pages/Recipients";
 // import Dashboard from "./pages/Dashboard";
 
 
@@ -20,9 +27,19 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/subscribe" element={<Subscribe />} />
-            <Route path="/book" element={<Dashboard />} />
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+            <Route path="/faqs" element={<Faq />} />
+            <Route path="/login" element={<Login />} />
             {/* <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<Signin />} /> */}
+
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route path="book" element={<BookCallForm />} />
+              <Route path="history" element={<CallHistory />} />
+              <Route path="recipients" element={<Recipients />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
+
           </Routes>
         </main>
         <Footer />

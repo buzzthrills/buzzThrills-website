@@ -117,7 +117,7 @@ const HeroSection: React.FC = () => {
                         alt="BuzzThrills Illustration"
                         className="w-full rounded-3xl max-w-md mx-auto md:mx-0"
                     />
-                </motion.div>
+                </motion.div>bg-[#f4f4f4]
 
             </div>
 

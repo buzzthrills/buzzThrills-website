@@ -1,133 +1,77 @@
-import React, { useEffect, useState } from "react";
-import type { Recipient } from "../utils/type";
-import { apiRequest } from "../utils/apiRequest";
-
-type CallHistoryItem = Recipient & {
-    status: string;
-};
+import React from "react";
+import { Phone, Calendar, Gift } from "lucide-react";
 
 const CallHistory: React.FC = () => {
-    const [calls, setCalls] = useState<CallHistoryItem[]>([]);
-    const [loading, setLoading] = useState(true);
+  // Placeholder calls
+  const placeholderCalls = Array.from({ length: 5 }, (_, idx) => ({
+    name: `Recipient ${idx + 1}`,
+    phone: `+234 800 000 000${idx}`,
+    occasionType: "Birthday",
+    date: "YYYY-MM-DD",
+    time: "--:--",
+    callType: idx % 2 === 0 ? "Video Call" : "Voice Call",
+    status: idx % 3 === 0 ? "Completed" : idx % 3 === 1 ? "Pending" : "Cancelled",
+  }));
 
-    const fetchCallHistory = async () => {
-        setLoading(true);
+  return (
+    <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <h2 className="text-2xl font-semibold text-gray-800">Call History</h2>
 
-        const storedUser = localStorage.getItem("user");
-        if (!storedUser) {
-            console.error("❌ No user in localStorage");
-            setLoading(false);
-            return;
-        }
-
-        const userId = JSON.parse(storedUser)._id;
-
-        if (!userId) {
-            console.error("❌ User ID missing");
-            setLoading(false);
-            return;
-        }
-
-        const res = await apiRequest<{ calls: any[] }>(
-            `/user_dashboard/call-history/${userId}`,
-            { method: "GET" }
-        );
-
-        if (res.success && res.data?.calls) {
-            const formatted: CallHistoryItem[] = res.data.calls.map((c) => ({
-                name: c.recipient?.name ?? "",
-                phone: c.recipient?.phone ?? "",
-                relationship: c.recipient?.relationship ?? "", // ✅ REQUIRED
-                occasionType: c.recipient?.occasionType ?? "",
-                date: c.recipient?.date ?? "",
-                time: c.recipient?.time ?? "",
-                callType: c.recipient?.callType ?? "",
-                status: c.status.charAt(0).toUpperCase() + c.status.slice(1),
-            }));
-
-
-            setCalls(formatted);
-        }
-
-        setLoading(false);
-    };
-
-
-
-    useEffect(() => {
-        fetchCallHistory();
-    }, []);
-
-    return (
-        <div className="p-4 max-w-5xl mx-auto">
-            <h2 className="text-xl font-semibold mb-4">Call History</h2>
-
-            {loading ? (
-                <p className="text-center text-gray-500">Loading call history...</p>
-            ) : (
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="px-4 py-2 text-gray-600 font-medium">Name</th>
-                                <th className="px-4 py-2 text-gray-600 font-medium">Phone</th>
-                                <th className="px-4 py-2 text-gray-600 font-medium">Occasion</th>
-                                <th className="px-4 py-2 text-gray-600 font-medium">
-                                    Date & Time
-                                </th>
-                                <th className="px-4 py-2 text-gray-600 font-medium">Call Type</th>
-                                <th className="px-4 py-2 text-gray-600 font-medium">Status</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {calls.map((call, idx) => (
-                                <tr
-                                    key={idx}
-                                    className={`border-b transition hover:bg-gray-50 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                                        }`}
-                                >
-                                    <td className="px-4 py-2 text-gray-700">{call.name}</td>
-                                    <td className="px-4 py-2 text-gray-700">{call.phone}</td>
-                                    <td className="px-4 py-2 text-gray-700">
-                                        {call.occasionType}
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-700">
-                                        {call.date} {call.time}
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-700">{call.callType}</td>
-
-                                    <td className="px-4 py-2">
-                                        <span
-                                            className={`px-2 py-1 rounded-full text-sm font-semibold ${call.status === "Completed"
-                                                ? "bg-green-100 text-green-800"
-                                                : call.status === "Pending"
-                                                    ? "bg-yellow-100 text-yellow-800"
-                                                    : "bg-red-100 text-red-800"
-                                                }`}
-                                        >
-                                            {call.status}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-
-                            {calls.length === 0 && (
-                                <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-6 text-center text-gray-500"
-                                    >
-                                        No calls booked yet.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+      {placeholderCalls.length === 0 ? (
+        <div className="text-center py-20 text-gray-500">
+          No calls booked yet.
         </div>
-    );
+      ) : (
+        <div className="space-y-4">
+          {placeholderCalls.map((call, idx) => (
+            <div
+              key={idx}
+              className="bg-white shadow-md hover:shadow-lg rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition"
+            >
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+                {/* Name & Phone */}
+                <div className="flex flex-col">
+                  <span className="text-gray-800 font-semibold">{call.name}</span>
+                  <span className="text-gray-500 text-sm">{call.phone}</span>
+                </div>
+
+                {/* Occasion */}
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Gift size={16} />
+                  <span className="text-sm">{call.occasionType}</span>
+                </div>
+
+                {/* Date & Time */}
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Calendar size={16} />
+                  <span className="text-sm">{call.date} {call.time}</span>
+                </div>
+
+                {/* Call Type */}
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Phone size={16} />
+                  <span className="text-sm">{call.callType}</span>
+                </div>
+              </div>
+
+              {/* Status Badge */}
+              <span
+                className={`px-3 py-1 rounded-full font-semibold text-sm ${
+                  call.status === "Completed"
+                    ? "bg-green-100 text-green-800"
+                    : call.status === "Pending"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                {call.status}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default CallHistory;

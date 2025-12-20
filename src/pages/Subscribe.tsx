@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import toast from "react-hot-toast";
 import { apiRequest } from "../utils/apiRequest";
 
@@ -21,36 +22,36 @@ const PLANS: Record<string, Plan> = {
         price: "₦15,000 / month",
         calls: "Up to 12 Surprise Calls monthly",
         overview: "Never forget the special moments...",
-        whatsIncluded: ["Up to 12 heartfelt surprise calls per month", "Custom message scripting", "Access to all BuzzThrills call types", "Priority booking", "Flexible scheduling"],
+        whatsIncluded: ["Up to 12 heartfelt surprise calls per month", "Custom messages for every recipient", "Access to all Buzzthrills call types, even premium ones at no extra cost.", "Priority booking anytime you need an extra surprise."],
         perks: ["Ad-ons available on request", "Best-value starter plan", "Simple management"],
-        perfectFor: "Individuals who want consistent, low-effort thoughtfulness."
+        perfectFor: "Someone who wants consistent thoughtfulness without stress."
     },
     plus: {
         title: "Buzz Plus",
         price: "₦25,000 / month",
         calls: "Up to 20 Surprise Calls monthly",
         overview: "More calls, more love...",
-        whatsIncluded: ["Up to 20 surprise calls per month", "Faster processing", "Customizable message templates", "Birthday music calls, light pranks", "Option to add special instructions"],
+        whatsIncluded: ["Up to 20 surprise calls per month", "Faster processing & priority call slots", "Customizable messages for each call", "Birthday music calls, light pranks"],
         perks: ["Higher delivery SLA", "Ideal for multi-recipient months", "Great balance of volume + premium features"],
-        perfectFor: "Anyone who shows love through steady gestures."
+        perfectFor: "People who show love through constant thoughtful gestures."
     },
     orbit: {
         title: "Buzz Orbit",
         price: "₦50,000 / month",
         calls: "30+ Premium Surprise Calls monthly",
-        overview: "The VIP tier...",
-        whatsIncluded: ["30+ premium personalized calls", "Unlimited access to ALL premium calls", "Custom voice notes", "Preferred caller/host", "Bonus surprise calls every other month"],
+        overview: "For those who want to do it BIG; from families to creators to Business Owners to small teams.",
+        whatsIncluded: ["30+ premium personalized calls", "Unlimited access to ALL premium calls", "Custom voice notes", "Choose your preferred caller", "Preferred caller/host", " VIP scheduling & priority customer support", "Bonus surprise calls every other month"],
         perks: ["VIP scheduling & priority support", "Custom voice & production elements", "Dedicated support contact"],
-        perfectFor: "Families, creators, executives or small teams wanting high-touch experiences."
+        perfectFor: "Families, executives, influencers & VIPs who never want to forget anyone."
     },
     corporate: {
         title: "Buzz Corporate",
         price: "Custom — from ₦XX,XXX / month",
         calls: "35+ Corporate Calls (minimum)",
-        overview: "A corporate-grade engagement solution...",
-        whatsIncluded: ["At least 35 corporate-appropriate calls", "Branded messaging and tone", "Staff birthday & work anniversary reminders", "Client appreciation and follow-up calls", "Monthly performance reports"],
+        overview: "Built specifically for companies, HR teams & professionals needing structured employee/client engagement.",
+        whatsIncluded: ["At least 35 corporate-appropriate calls", "Custom brand messaging", "Staff birthday & milestone reminders", "Monthly performance reports", "Dedicated account manager"],
         perks: ["Dedicated account manager", "Custom integration options", "Reporting cadence"],
-        perfectFor: "Businesses and HR teams wanting consistent, branded appreciation."
+        perfectFor: "Businesses that want consistent, professional appreciation for staff, clients, and partners."
     },
 };
 
@@ -199,64 +200,119 @@ const Subscribe: React.FC = () => {
         }
     };
 
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.12,
+                delayChildren: 0.1,
+            },
+        },
+    };
+
+    const itemVariants: Variants = {
+        hidden: { opacity: 0, y: 24 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, ease: "easeOut" as any }
+        },
+    };
+
+
+
     return (
         <div className="max-w-4xl mx-auto px-2 py-15">
             <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45 }}
-                className="bg-white rounded-3xl border-[#c804d7]/10 overflow-hidden"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="relative bg-white rounded-3xl border border-purple-100 shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden"
             >
-                <div className="px-2 md:flex md:items-center md:justify-between">
+                {/* subtle gradient glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#36014b]/10 via-purple-200/40 to-[#c804d7]/15 pointer-events-none" />
+
+                <motion.div
+                    variants={itemVariants}
+                    className="relative px-6 py-8 md:flex md:items-center md:justify-between"
+                >
                     <div>
-                        <h1 className="text-3xl md:text-4xl font-extrabold text-[#36014b]">{plan.title}</h1>
-                        <p className="mt-2 text-[#c804d7] font-semibold text-lg">{plan.price}</p>
-                        <p className="text-sm text-gray-500 mt-1">{plan.calls}</p>
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-[#36014b] tracking-tight">
+                            {plan.title}
+                        </h1>
+
+                        <p className="mt-2 text-[#c804d7] font-semibold text-xl">
+                            {plan.price}
+                        </p>
+
+                        <p className="text-sm text-gray-500 mt-1">
+                            {plan.calls}
+                        </p>
                     </div>
 
-                    <div className="mt-6 md:mt-0 w-full md:w-1/3 flex flex-col gap-2">
+                    <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="mt-6 md:mt-0 w-full md:w-1/3"
+                    >
                         <button
                             disabled={loading}
                             onClick={handlePayment}
-                            className="w-full py-3 rounded-lg bg-gradient-to-r from-[#36014b] to-[#c804d7] text-white font-semibold shadow-lg hover:shadow-2xl transition disabled:opacity-50"
+                            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#36014b] to-[#c804d7] text-white font-semibold shadow-lg hover:shadow-2xl transition disabled:opacity-50"
                         >
                             {loading ? "Processing..." : "Proceed to Payment"}
                         </button>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
 
-                <div className="mt-4 mx-2">
+
+                <motion.div variants={itemVariants} className="px-6">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Email address
                     </label>
+
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                        className="w-full px-2 text-sm py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#c804d7] focus:outline-none"
-                        required
+                        placeholder="Your email address"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#c804d7] focus:outline-none transition"
                     />
+
                     <p className="text-xs text-gray-500 mt-1">
                         We’ll use this email for your receipt and account access.
                     </p>
-                </div>
+                </motion.div>
 
 
-                <div className="border-t border-gray-300 mt-3 px-4 py-4 grid md:grid-cols-2 gap-8">
+
+                <motion.div
+                    variants={itemVariants}
+                    className="border-t border-gray-200 mt-6 px-6 py-8 grid md:grid-cols-2 gap-10"
+                >
+
                     <div>
                         <h3 className="text-xl font-semibold text-[#36014b]">Overview</h3>
                         <p className="text-gray-700 mt-3 leading-relaxed">{plan.overview}</p>
 
                         <h4 className="text-lg font-semibold text-[#36014b] mt-6">What's included</h4>
-                        <ul className="mt-3 space-y-2 text-gray-800">
+                        <ul className="mt-4 space-y-3">
                             {plan.whatsIncluded.map((item, idx) => (
-                                <li key={idx} className="flex gap-3 items-start">
-                                    <div className="mt-1 w-2 h-2 rounded-full bg-[#c804d7]" />
-                                    <div><p className="text-sm">{item}</p></div>
-                                </li>
+                                <motion.li
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.05 }}
+                                    className="flex gap-3 items-start"
+                                >
+                                    <span className="mt-1 w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#36014b] to-[#c804d7]" />
+                                    <p className="text-sm text-gray-700">{item}</p>
+                                </motion.li>
                             ))}
                         </ul>
+
 
                         {plan.perks.length > 0 && (
                             <>
@@ -272,7 +328,16 @@ const Subscribe: React.FC = () => {
                         <h3 className="text-xl font-semibold text-[#36014b]">Perfect for</h3>
                         <p className="mt-3 text-gray-700">{plan.perfectFor}</p>
                     </div>
-                </div>
+                </motion.div>
+
+                <motion.div
+                    variants={itemVariants}
+                    className="bg-gray-50 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between text-sm text-gray-600"
+                >
+                    <p>🔒 Secure payment powered by Paystack</p>
+                    <p>No hidden fees • Cancel anytime</p>
+                </motion.div>
+
             </motion.div>
         </div>
     );

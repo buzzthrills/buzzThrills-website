@@ -68,8 +68,8 @@ const PlansSection: React.FC = () => {
             features={[
               "Up to 12 heartfelt calls monthly",
               "Custom messages for every recipient",
-              "Access to all call types",
-              "Priority booking",
+              "Access to all Buzzthrills call types, even premium ones at no extra cost. ",
+              "Priority booking anytime you need an extra surprise.",
             ]}
             onSelect={() => (window.location.href = "/subscribe?plan=lite")}
           />
