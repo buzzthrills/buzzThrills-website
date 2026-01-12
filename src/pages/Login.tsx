@@ -1,71 +1,68 @@
 import React, { useState } from "react";
 import { apiRequest } from "../utils/apiRequest";
 import { toast } from "react-hot-toast";
-import OTPModal from "../components/OTPModal";
-// import { nav } from "framer-motion/client";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
-  const [otpModalOpen, setOtpModalOpen] = useState(false);
-  const [otpAmount, setOtpAmount] = useState(0); // optional: can be used for display
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return toast.error("Email is required!");
+
+    if (!email || !password) {
+      return toast.error("Email and password are required!");
+    }
+
     setLoading(true);
 
-    // Call backend API to send OTP
     const response = await apiRequest("/user_auth/login", {
       method: "POST",
-      body: { email },
+      body: { email, password },
       showSuccess: true,
     });
 
     setLoading(false);
 
     if (response.success) {
-      setOtpModalOpen(true); // Open OTP modal on success
-      setOtpAmount(0); // optional, set if you want to show amount in modal
-    }
-  };
-
-  const handleVerifyOtp = async (otp: string) => {
-    const response = await apiRequest("/user_auth/verify-otp", {
-      method: "POST",
-      body: { email, otp },
-      showSuccess: true,
-    });
-
-    if (response.success) {
-      setOtpModalOpen(false);
-      // toast.success("Login successful!");
-      // Save token or user info if returned
+      // Save auth data
       localStorage.setItem("auth-token", response.data?.token || "");
       localStorage.setItem("user", JSON.stringify(response.data?.user || {}));
-      navigate("/dashboard");
-      // Redirect or update state as needed
+
+      navigate("/dashboard/book");
     }
   };
 
   return (
-    <div className="min-h-screen flex text-black   justify-center  px-4">
-      <div className=" mt-16 h-   p-4 w-full border border-gray-300 rounded-md  max-w-md">
-        <h1 className="text-3xl font-bold text-black mb-6 text-left drop-shadow-lg">
-          Login
-        </h1>
+    <div className="min-h-screen flex justify-center px-4 text-black">
+      <div className="mt-16 p-4 w-full border border-gray-300 rounded-md max-w-md">
+        <h1 className="text-3xl font-bold mb-6">Login</h1>
 
         <form onSubmit={handleLogin} className="space-y-4">
+          {/* Email */}
           <div>
-            <label className="block text-black/90 mb-2">Email Address</label>
+            <label className="block mb-2">Email Address</label>
             <input
               type="email"
-              placeholder="you@example.com"
+              placeholder="Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-white/20 text-black placeholder-black/70 border border-black/30 focus:border-black focus:outline-none transition"
+              className="w-full px-4 py-3 rounded-xl border border-black/30 focus:border-black outline-none"
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block mb-2">Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-black/30 focus:border-black outline-none"
               required
             />
           </div>
@@ -73,20 +70,12 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 mt-2 bg-gradient-to-r from-[#ffae00] to-[#c804d7] text-white font-bold rounded-2xl shadow-lg hover:scale-105 transition-transform"
+            className="w-full py-3 bg-gradient-to-r from-[#ffae00] to-[#c804d7] text-white font-bold rounded-2xl hover:scale-105 transition"
           >
-            {loading ? "Sending OTP..." : "Send OTP"}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
-
-      {/* OTP Modal */}
-      <OTPModal
-        show={otpModalOpen}
-        onClose={() => setOtpModalOpen(false)}
-        amount={otpAmount} // optional, can hide if not needed
-        onVerify={handleVerifyOtp}
-      />
     </div>
   );
 };

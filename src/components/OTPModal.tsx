@@ -10,7 +10,7 @@ interface OTPModalProps {
   onVerify: (otp: string) => void;
 }
 
-const OTPModal: React.FC<OTPModalProps> = ({ show, onClose, amount, onVerify }) => {
+const OTPModal: React.FC<OTPModalProps> = ({ show, onClose,  onVerify }) => {
   const [isError] = useState(false);
 
   if (!show) return null;
@@ -22,12 +22,11 @@ const OTPModal: React.FC<OTPModalProps> = ({ show, onClose, amount, onVerify }) 
   };
 
   return (
-    <ModalWrapper isOpen={show} onClose={onClose}>
-      <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/40">
-        <div className="bg-white rounded-xl shadow-xl p-6 w-96 max-w-[90%]">
+      <div className=" inset-0 z-50 flex justify-center items-center bg-white">
+        <div className=" rounded-xl  p-6 w-96 max-w-[90%]">
           <h2 className="text-xl font-semibold mb-3 text-center">Confirm Deposit</h2>
           <p className="text-center text-gray-700 mb-5">
-            Enter the OTP sent to your email for <span className="font-bold">N{amount.toLocaleString()}</span> deposit
+            Enter the OTP sent to your email to login to your dashboard.
           </p>
 
           <OTPInput length={6} onComplete={handleComplete} isError={isError} />
@@ -42,7 +41,6 @@ const OTPModal: React.FC<OTPModalProps> = ({ show, onClose, amount, onVerify }) 
           </div>
         </div>
       </div>
-    </ModalWrapper>
   );
 };
 

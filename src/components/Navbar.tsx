@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 // import type { Varient } from "framer-motion";
 import { logo } from "../assets";
+import { toast } from "react-hot-toast";
 
 type Subscription = {
   _id: string;
@@ -18,21 +19,21 @@ type User = {
   subscription?: Subscription;
 };
 
-const menuContainer = {
-  hidden: { x: "100%" },
-  visible: {
-    x: "0%", // keep string
-    transition: {
-      type: "spring",
-      stiffness: 260,
-      damping: 28,
-    },
-  },
-  exit: {
-    x: "100%",
-    transition: { duration: 0.25 },
-  },
-};
+// const menuContainer = {
+//   hidden: { x: "100%" },
+//   visible: {
+//     x: "0%", // keep string
+//     transition: {
+//       type: "spring",
+//       stiffness: 260,
+//       damping: 28,
+//     },
+//   },
+//   exit: {
+//     x: "100%",
+//     transition: { duration: 0.25 },
+//   },
+// };
 
 
 const menuItem = {
@@ -47,19 +48,29 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (!storedUser) return;
+
+    const parsed = JSON.parse(storedUser);
+
+    if (parsed?._id) {
+      setUser(parsed);
+    } else {
+      setUser(null);
+    }
   }, []);
 
+
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("user");
+    setIsOpen(false);
     navigate("/");
   };
 
-  const isSignedIn = Boolean(user);
+  const isSignedIn = Boolean(user?._id);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-[#36014b] to-[#c804d7] shadow-md">
-      <div className="container mx-auto flex items-center justify-between px-4 py-4">
+      <div className="container mx-auto flex items-center px-4 justify-between ">
 
         {/* Logo */}
         <Link to="/" className="flex items-center">
@@ -68,9 +79,13 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Navigation (UNCHANGED) */}
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/services" className="text-white/90 hover:text-white transition">
+          <button
+            onClick={() => toast("🚧 Services coming soon", { icon: "⏳" })}
+            className="text-white/90 hover:text-white transition"
+          >
             Services
-          </Link>
+          </button>
+
 
           <Link to="/faqs" className="text-white/90 hover:text-white transition">
             FAQs
@@ -95,6 +110,7 @@ const Navbar: React.FC = () => {
           ) : (
             <Link
               to="/login"
+              onClick={() => setIsOpen(false)}
               className="px-5 py-2 rounded-xl bg-white text-[#36014b] font-semibold hover:bg-gray-200 transition"
             >
               Login
@@ -133,14 +149,17 @@ const Navbar: React.FC = () => {
             <motion.ul className="mt-20 space-y-4">
 
               <motion.li variants={menuItem}>
-                <Link
-                  to="/services"
-                  onClick={() => setIsOpen(false)}
+                <button
+                  onClick={() => {
+                    toast("🚧 Services coming soon", { icon: "⏳" });
+                    setIsOpen(false);
+                  }}
                   className="block w-full border border-gray-300 rounded-xl px-4 py-3 bg-gray-50 text-gray-800 font-medium
-                             hover:bg-purple-50 hover:text-purple-700 transition"
+             hover:bg-purple-50 hover:text-purple-700 transition text-left"
                 >
                   Services
-                </Link>
+                </button>
+
               </motion.li>
 
               <motion.li variants={menuItem}>
@@ -181,11 +200,13 @@ const Navbar: React.FC = () => {
                 <motion.li variants={menuItem}>
                   <Link
                     to="/login"
+                    onClick={() => setIsOpen(false)}
                     className="block w-full rounded-xl px-4 py-3 bg-gradient-to-r from-[#ffae00] to-[#c804d7] text-white font-semibold
-                               hover:bg-gray-800 transition"
+             hover:bg-gray-800 transition"
                   >
                     Login
                   </Link>
+
                 </motion.li>
               )}
 
@@ -193,7 +214,7 @@ const Navbar: React.FC = () => {
           </motion.aside>
         )}
       </AnimatePresence>
-    </nav>
+    </nav >
   );
 };
 

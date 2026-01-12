@@ -27,13 +27,25 @@ const RecipientStep: React.FC<Props> = ({ recipients, setRecipients, planKey, ma
     if (stored) {
       const parsed: Recipient[] = JSON.parse(stored);
       setSavedRecipients(parsed);
-      setRecipients(parsed); // initialize main recipients
+      setRecipients(prev => {
+        const filled = [...prev];
+        parsed.forEach((rec, i) => {
+          if (i < filled.length) filled[i] = rec;
+        });
+        return filled;
+      });
     }
   }, []);
 
-  const isRecipientValid = (r: Recipient) => {
-    return r.name.trim() !== "" && r.phone.trim() !== "" && r.callType.trim() !== "";
+  const isRecipientValid = (r?: Recipient) => {
+    if (!r) return false;
+    return (
+      r.name.trim() !== "" &&
+      r.phone.trim() !== "" &&
+      r.callType.trim() !== ""
+    );
   };
+
 
   const saveRecipient = () => {
     const current = recipients[currentIndex];
@@ -68,9 +80,8 @@ const RecipientStep: React.FC<Props> = ({ recipients, setRecipients, planKey, ma
       <div className="flex gap-4">
         <div
           onClick={() => setMode("csv")}
-          className={`flex-1 cursor-pointer p-4 rounded-lg border transition ${
-            mode === "csv" ? "bg-blue-500 text-white border-blue-500" : "bg-white border-gray-300"
-          }`}
+          className={`flex-1 cursor-pointer p-4 rounded-lg border transition ${mode === "csv" ? "bg-blue-500 text-white border-blue-500" : "bg-white border-gray-300"
+            }`}
         >
           <h3 className="font-semibold flex items-center gap-2">
             <Download size={18} /> Upload CSV
@@ -79,9 +90,8 @@ const RecipientStep: React.FC<Props> = ({ recipients, setRecipients, planKey, ma
         </div>
         <div
           onClick={() => setMode("manual")}
-          className={`flex-1 cursor-pointer p-4 rounded-lg border transition ${
-            mode === "manual" ? "bg-blue-500 text-white border-blue-500" : "bg-white border-gray-300"
-          }`}
+          className={`flex-1 cursor-pointer p-4 rounded-lg border transition ${mode === "manual" ? "bg-blue-500 text-white border-blue-500" : "bg-white border-gray-300"
+            }`}
         >
           <h3 className="font-semibold flex items-center gap-2">
             <Plus size={18} /> Manual Entry
@@ -131,11 +141,10 @@ const RecipientStep: React.FC<Props> = ({ recipients, setRecipients, planKey, ma
             <button
               onClick={saveRecipient}
               disabled={!isRecipientValid(recipients[currentIndex])}
-              className={`px-6 btn-secondary py-3 font-semibold rounded-lg self-start transition ${
-                isRecipientValid(recipients[currentIndex])
-                  ? "bg-green-500 text-white hover:bg-green-600"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              className={`px-6 btn-secondary py-3 font-semibold rounded-lg self-start transition ${isRecipientValid(recipients[currentIndex])
+                ? "bg-green-500 text-white hover:bg-green-600"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
             >
               Save & Next
             </button>

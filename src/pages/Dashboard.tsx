@@ -4,11 +4,11 @@ import BookCallForm from "../components/BookCallForm";
 import Tabs from "../components/Tabs";
 
 const Dashboard: React.FC = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  // const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [activeTab , setActiveTab] = useState("Book Call");
 
   // Grab the subscription ID safely
-  const subscriptionId = user.subscription?._id || "";
+  // const subscriptionId = user.subscription?._id || "";
 
   return (
     <div className="mt-8">
@@ -27,4 +27,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-

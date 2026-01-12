@@ -2,14 +2,15 @@
 import { toast } from "react-hot-toast";
 
 // Update API URL to local host
-// const API_URL = "http://localhost:3000";
-const API_URL = "https://buzzthrillz-backend.onrender.com";
+const API_URL = "http://localhost:3000";
+// const API_URL = "https://buzzthrillz-backend.onrender.com";
 
 type ApiOptions = {
   method?: string;
   body?: Record<string, any>;
   token?: string;
   showSuccess?: boolean;
+  showLoader?: boolean;
 };
 
 type ApiResponse<T = any> = {
@@ -19,9 +20,12 @@ type ApiResponse<T = any> = {
 
 export const apiRequest = async <T = any>(
   endpoint: string,
-  { method = "GET", body, token, showSuccess = false }: ApiOptions = {}
+  { method = "GET", body, token, showLoader = false, showSuccess = false }: ApiOptions = {}
 ): Promise<ApiResponse<T>> => {
-  const toastId = toast.loading("Please wait...");
+  let toastId: string | undefined;
+  if (showLoader) {
+    toastId = toast.loading("Please wait...");
+  }
 
   try {
     const authToken = token || localStorage.getItem("auth-token");
@@ -30,9 +34,7 @@ export const apiRequest = async <T = any>(
       "Content-Type": "application/json",
     };
 
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`;
-    }
+    if (authToken) headers.Authorization = `Bearer ${authToken}`;
 
     const response = await fetch(`${API_URL}${endpoint}`, {
       method,
@@ -41,7 +43,8 @@ export const apiRequest = async <T = any>(
     });
 
     const data = await response.json();
-    toast.dismiss(toastId);
+
+    if (showLoader && toastId) toast.dismiss(toastId);
 
     if (!response.ok) {
       toast.error(data.msg || data.message || "Something went wrong!");
@@ -54,9 +57,10 @@ export const apiRequest = async <T = any>(
 
     return { success: true, data };
   } catch (error) {
-    toast.dismiss(toastId);
+    if (showLoader && toastId) toast.dismiss(toastId);
     toast.error("Network error! Please try again.");
     console.error("API Error:", error);
     return { success: false, data: null };
   }
 };
+

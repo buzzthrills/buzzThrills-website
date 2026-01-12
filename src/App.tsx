@@ -15,6 +15,7 @@ import BookCallForm from "./components/BookCallForm";
 import CallHistory from "./components/CallHistory";
 import Profile from "./pages/Profile";
 import Recipients from "./pages/Recipients";
+import Signup from "./pages/Signup";
 // import Dashboard from "./pages/Dashboard";
 
 
@@ -30,8 +31,8 @@ function App() {
             {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route path="/faqs" element={<Faq />} />
             <Route path="/login" element={<Login />} />
-            {/* <Route path="/signup" element={<Signup />} />
-            <Route path="/signin" element={<Signin />} /> */}
+            <Route path="/signup" element={<Signup />} />
+            {/* <Route path="/signin" element={<Signin />} /> */}
 
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route path="book" element={<BookCallForm />} />

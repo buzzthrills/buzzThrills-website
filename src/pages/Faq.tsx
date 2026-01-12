@@ -109,7 +109,7 @@ const Faq: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden py-20 px-4">
+    <section className="relative min-h-screen flex items-center overflow-hidden pb-20  px-4">
       {/* Particles Background */}
       <Particles
         className="absolute inset-0"
@@ -129,7 +129,7 @@ const Faq: React.FC = () => {
       <motion.div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(135deg, #36014b, #c804d7, #171050)",
+          background: "white",
           backgroundSize: "300% 300%",
         }}
         animate={{
@@ -145,7 +145,7 @@ const Faq: React.FC = () => {
 
       {/* Content */}
       <div className="relative max-w-4xl mx-auto z-10">
-        <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12 drop-shadow-lg">
+        <h1 className="text-4xl md:text-5xl font-bold text-black text-center mb-12 drop-shadow-lg">
           Frequently Asked Questions
         </h1>
 
@@ -168,7 +168,7 @@ const Faq: React.FC = () => {
               <AnimatePresence>
                 {activeIndex === idx && (
                   <motion.div
-                    className="px-6 pb-4 text-gray-200 text-sm"
+                    className="px-6 pb-4 text-gray-700 text-sm"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}

@@ -149,7 +149,7 @@ const Subscribe: React.FC = () => {
             });
 
             if (!initRes.success || !initRes.data?.subscriptionId) {
-                toast.error("Failed to start subscription");
+                // toast.error("Failed to start subscription");
                 setLoading(false);
                 return;
             }
@@ -174,7 +174,7 @@ const Subscribe: React.FC = () => {
                             toast.success("Payment successful! Subscription is now active.");
                             localStorage.setItem("user", JSON.stringify(verifyRes.data.user));
 
-                            navigate("/book");
+                            navigate("/signup", { state: { fromSubscribe: true, email } });
                         } else {
                             toast.error("Payment completed but could not be verified.");
                         }
