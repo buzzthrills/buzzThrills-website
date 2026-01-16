@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 // import type { Varient } from "framer-motion";
 import { logo } from "../assets";
 import { toast } from "react-hot-toast";
+import type { User } from "../utils/type";
 
-type Subscription = {
-  _id: string;
-  plan?: {
-    name: string;
-  };
-};
 
-type User = {
-  _id: string;
-  fullName: string;
-  email: string;
-  subscription?: Subscription;
-};
+
+
 
 // const menuContainer = {
 //   hidden: { x: "100%" },
@@ -41,30 +32,43 @@ const menuItem = {
   visible: { opacity: 1, x: 0 },
 };
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}> = ({ user, setUser }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) return;
+  // useEffect(() => {
+  //   const syncUser = () => {
+  //     const storedUser = localStorage.getItem("user");
+  //     if (!storedUser) {
+  //       setUser(null);
+  //       return;
+  //     }
 
-    const parsed = JSON.parse(storedUser);
+  //     try {
+  //       const parsed = JSON.parse(storedUser);
+  //       setUser(parsed?._id ? parsed : null);
+  //     } catch {
+  //       setUser(null);
+  //     }
+  //   };
 
-    if (parsed?._id) {
-      setUser(parsed);
-    } else {
-      setUser(null);
-    }
-  }, []);
+  //   syncUser();
+
+  //   window.addEventListener("storage", syncUser);
+  //   return () => window.removeEventListener("storage", syncUser);
+  // }, []);
 
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    setUser(null);          // 🔴 THIS WAS MISSING
     setIsOpen(false);
     navigate("/");
   };
+
 
   const isSignedIn = Boolean(user?._id);
 
@@ -147,7 +151,6 @@ const Navbar: React.FC = () => {
             </button>
 
             <motion.ul className="mt-20 space-y-4">
-
               <motion.li variants={menuItem}>
                 <button
                   onClick={() => {

@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { apiRequest } from "../utils/apiRequest";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import type { User } from "../utils/type";
 
-const Login: React.FC = () => {
+type LoginProps = {
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+};
+
+const Login: React.FC<LoginProps> = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,12 +32,13 @@ const Login: React.FC = () => {
     setLoading(false);
 
     if (response.success) {
-      // Save auth data
-      localStorage.setItem("auth-token", response.data?.token || "");
-      localStorage.setItem("user", JSON.stringify(response.data?.user || {}));
+      localStorage.setItem("auth-token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
+      setUser(response.data.user); // 🔥 THIS IS THE FIX
       navigate("/dashboard/book");
     }
+
   };
 
   return (

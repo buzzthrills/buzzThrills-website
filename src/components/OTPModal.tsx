@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import OTPInput from "./OTPInput";
-import ModalWrapper from "./ModalWrapper";
+// import ModalWrapper from "./ModalWrapper";
 // import ModalWrapper from "./ModalWrapper";
 
 interface OTPModalProps {

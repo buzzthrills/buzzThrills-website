@@ -17,20 +17,60 @@ import Profile from "./pages/Profile";
 import Recipients from "./pages/Recipients";
 import Signup from "./pages/Signup";
 // import Dashboard from "./pages/Dashboard";
+import FloatingContactButton from "./components/FloatingContactButton";
+import type { User } from "./utils/type";
+import { useEffect, useState } from "react";
+import NewsletterModal from "./components/NewsletterModal";
+
 
 
 function App() {
+
+
+  const [user, setUser] = useState<User | null>(null);
+  const [showNewsletter, setShowNewsletter] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
+
+
+  useEffect(() => {
+    const hasSeenNewsletter = localStorage.getItem("newsletter_seen");
+
+    if (hasSeenNewsletter) return;
+
+    const timer = setTimeout(() => {
+      setShowNewsletter(true);
+      localStorage.setItem("newsletter_seen", "true");
+    }, 5000); // ⏱️ 5 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        <Navbar />
+        <Navbar user={user} setUser={setUser} />
         <main className="flex-grow min-h-[90vh] pt-24">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/subscribe" element={<Subscribe />} />
             {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route path="/faqs" element={<Faq />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={<Login setUser={setUser} />}
+            />
             <Route path="/signup" element={<Signup />} />
             {/* <Route path="/signin" element={<Signin />} /> */}
 
@@ -44,6 +84,15 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <FloatingContactButton />
+
+
+        <NewsletterModal
+          open={showNewsletter}
+          onClose={() => setShowNewsletter(false)}
+        />
+
+
         <Toaster
           position="top-center"
           toastOptions={{
